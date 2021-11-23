@@ -19,8 +19,9 @@ func init() {
 	// TODO: clipというフラグを追加し、変数clipに入れる。
 	// デフォルト値は、""。
 	// 説明は、"切り取る画像サイズ（`幅[px|%]x高さ[px|%]`）"。
-
+	flag.StringVar(&clip, "clip", "", "切り取る画像サイズ（`幅[px|%]x高さ[px|%]`）")
 	// TODO: フラグをパースする。
+	flag.Parse()
 }
 
 func convert(dst, src string) error {
@@ -44,6 +45,9 @@ func convert(dst, src string) error {
 
 	// TODO: clipで何か指定されていれば、
 	// 標準出力に"切り抜きを行う予定"という文字列とともにclipの中身を出力する
+	if clip != "" {
+		fmt.Println("切り抜きを行う予定 ", clip)
+	}
 
 	switch strings.ToLower(filepath.Ext(dst)) {
 	case ".png":
@@ -61,9 +65,13 @@ func convert(dst, src string) error {
 
 func run() error {
 	// TODO: os.Argsではなく、flag.Args()を使ってコマンドライン引数を取得する。
+	args := flag.Args()
 
 	// TODO: フラグ（オプション）以外で、引数が2つ以上指定されているかチェックする。
 	// 引数が２つ以上指定されていない場合は、"画像ファイルを指定してください。"というエラーを返す。
+	if len(args) < 2 {
+		return fmt.Errorf("画像ファイルを指定してください。")
+	}
 
 	return convert(args[1], args[0])
 }
