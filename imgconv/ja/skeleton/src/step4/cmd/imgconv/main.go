@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"image"
+
 	// TODO: pngとjpegをデコードできるようにimportする。
+	"image/jpeg"
+	"image/png"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,6 +27,7 @@ func convert(dst, src string) error {
 	defer df.Close()
 
 	// TODO: 入力ファイルから画像をメモリ上にデコードする。
+	img, _, err := image.Decode(sf)
 	if err != nil {
 		return err
 	}
@@ -33,6 +37,15 @@ func convert(dst, src string) error {
 	// 拡張子は大文字でも小文字でも動作するようにする。
 	// なお、jpegは`jpeg.DefaultQuality`で保存する。
 	// エラー処理も忘れないようにする。
+	switch strings.ToLower(filepath.Ext(dst)) {
+	case ".png":
+		err = png.Encode(df, img)
+	case ".jpeg", ".jpg":
+		err = jpeg.Encode(df, img, &jpeg.Options{Quality: jpeg.DefaultQuality})
+	}
+	if err != nil {
+		return fmt.Errorf("画像ファイルをエンコードできませんでした。")
+	}
 
 	return nil
 }
