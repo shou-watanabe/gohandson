@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"step7/imgconv"
+	"gohandson/imgconv/ja/skeleton/src/step7/imgconv"
 )
 
 var (
@@ -52,6 +52,9 @@ func convert(dst, src string) error {
 	}
 
 	// TODO: resizeが指定されていれば、リサイズを行う。
+	if resize != "" {
+		img.Resize(resize)
+	}
 
 	switch strings.ToLower(filepath.Ext(dst)) {
 	case ".png":

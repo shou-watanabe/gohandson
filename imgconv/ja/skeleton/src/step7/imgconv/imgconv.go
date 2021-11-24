@@ -172,6 +172,7 @@ func (img *Image) Resize(s string) error {
 	dst := newDrawImage(image.Rectangle{image.ZP, sz}, img.ColorModel())
 	// TODO: draw.NearestNeighbor.Scaleを使って画像を縮小する。
 	// なお、第6引数の*draw.Optionsはnilで構わない。
+	draw.NearestNeighbor.Scale(dst, dst.Bounds(), img, img.Bounds(), draw.Src, nil)
 
 	img.Image = dst
 
